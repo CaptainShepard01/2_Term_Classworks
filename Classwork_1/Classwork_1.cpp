@@ -11,9 +11,10 @@ struct dict {
 };
 
 void Dictionary_creator() {
-	//system("chcp 1251");
+	//system("chcp utf-8");
 	//system("cls");
 	//std::wcout.imbue(std::locale("rus_rus.866"));
+	setlocale(LC_ALL, "rus");
 
 	ifstream f("words.bin", ios::binary);
 	dict d;
@@ -33,7 +34,7 @@ void Dictionary_creator() {
 
 void Words_creator()
 {
-	//system("chcp 1251");
+	//system("chcp utf-8");
 	//system("cls");
 	//std::wcout.imbue(std::locale("rus_rus.866"));
 	setlocale(LC_ALL, "rus");
@@ -53,7 +54,7 @@ void Words_creator()
 
 int main()
 {
-	//system("chcp 1251");
+	//system("chcp utf-8");
 	setlocale(LC_ALL, "rus");
 	system("cls");
 	//std::wcout.imbue(std::locale("rus_rus.866"));
