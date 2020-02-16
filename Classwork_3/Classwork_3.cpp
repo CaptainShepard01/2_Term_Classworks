@@ -35,6 +35,18 @@ struct Node {
 
 struct NodeList {
 	Node* head;
+	void addList(Autobus i) {
+		Node* node = new Node;
+		node->aut = i;
+		node->next = NULL;
+		if (head == NULL)head = node;
+		else {
+			node->next = head;
+			node->prev = node;
+			head = node;
+		}
+	
+	}
 
 };
 
