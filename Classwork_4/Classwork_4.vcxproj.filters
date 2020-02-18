@@ -15,13 +15,8 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Classwork_3.cpp">
+    <ClCompile Include="Classwork_4.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Header.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

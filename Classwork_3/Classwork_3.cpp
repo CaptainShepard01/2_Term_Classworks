@@ -28,158 +28,90 @@ struct Routes
 };
 
 struct Node {
-	Autobus aut;
+	Autobus info;
 	Node* next;
 	Node* prev;
 };
 
 struct NodeList {
 	Node* head;
-	void addList(Autobus i) {
+	Node* tail;
+
+	void addLast(Autobus i) {
 		Node* node = new Node;
-		node->aut = i;
+		node->info = i;
 		node->next = NULL;
-		if (head == NULL)head = node;
+		if (head == NULL) {
+			tail = node;head = node;
+		}
+		else {
+			node->prev = tail;
+			tail->next = node;
+			tail = node;
+		}
+	}
+
+	void addFirst(Autobus i) {
+		Node* node = new Node;
+		node->info = i;
+		node->next = NULL;
+		if (head == NULL) {
+			head = node; tail = node;
+		}
 		else {
 			node->next = head;
-			node->prev = node;
+			head->prev = node;
 			head = node;
 		}
-	
 	}
 
+	Node* find(Autobus key)
+	{
+		Node* cur = head;
+		while (cur)
+		{
+			if (cur->info.num == key.num)break;
+			cur = cur->next;
+		}
+		return cur;
+	}
+
+	Node* insert(Autobus key, Autobus ins)
+	{
+		if (Node* pkey = find(key)) {
+			Node* cur = new Node;
+			cur->info = ins;
+			cur->next = pkey->next;
+			cur->prev = pkey;
+			pkey->next = cur;
+			if (pkey != tail)(cur->next)->prev = cur;
+			else tail = cur;
+			return cur;
+		}
+		return 0;
+	}
+
+	bool remove(Autobus key)
+	{
+		if (Node* pkey = find(key)) {
+			if (pkey == head) {
+				head = (head)->next;
+				(head)->prev = 0;
+			}
+			else if (pkey == tail) {
+				tail = (tail)->prev;
+				(tail)->next = 0;
+			}
+			else {
+				(pkey->prev)->next = pkey->next;
+				(pkey->next)->prev = pkey->prev;
+			}
+			delete pkey;
+			return true;
+		}
+		return false;
+	}
 };
-
-Node* first(Autobus a) {
-	Node* cur = new Node;
-	cur->aut = a;
-	cur->next = 0;
-	cur->prev = 0;
-	return cur;
-}
-
-/*Routes* firstRoutes(Autobus a) {
-	Routes* cur = new Routes;
-	cur->aut = a;
-	cur->next = 0;
-	cur->prev = 0;
-	return cur;
-}
-*/
-
-void add(Node** pend, Autobus b)
-{
-	Node* cur = new Node;
-	cur->aut = b;
-	cur->next = 0;
-	cur->prev = *pend;
-	(*pend)->next = cur;
-	*pend = cur;
-}
-
-/*void addRoutes(Routes** pend, Autobus b)
-{
-	Routes* cur = new Routes;
-	cur->aut = b;
-	cur->next = 0;
-	cur->prev = *pend;
-	(*pend)->next = cur;
-	*pend = cur;
-}*/
-
-Node* find(Node* const pbeg, Autobus key)
-{
-	Node* cur = pbeg;
-	while (cur)
-	{
-		if (cur->aut.num == key.num)break;
-		cur = cur->next;
-	}
-	return cur;
-}
-
-/*Routes* findRoutes(Routes* const pbeg, Autobus key)
-{
-	Routes* cur = pbeg;
-	while (cur)
-	{
-		if (cur->aut.num == key.num)break;
-		cur = cur->next;
-	}
-	return cur;
-}*/
-
-bool remove(Node** pbeg, Node** pend, Autobus key)
-{
-	if (Node* pkey = find(*pbeg, key)) {
-		if (pkey == *pbeg) {
-			*pbeg = (*pbeg)->next;
-			(*pbeg)->next = 0;
-		}
-		else if (pkey == *pend) {
-			*pend = (*pend)->prev;
-			(*pend)->next = 0;
-		}
-		else {
-			(pkey->prev)->next = pkey->next;
-			(pkey->next)->prev = pkey->prev;
-		}
-		delete pkey;
-		return true;
-	}
-	return false;
-}
-
-/*bool removeRoutes(Routes** pbeg, Routes** pend, Autobus key)
-{
-	if (Routes* pkey = findRoutes(*pbeg, key)) {
-		if (pkey == *pbeg) {
-			*pbeg = (*pbeg)->next;
-			(*pbeg)->next = 0;
-		}
-		else if (pkey == *pend) {
-			*pend = (*pend)->prev;
-			(*pend)->next = 0;
-		}
-		else {
-			(pkey->prev)->next = pkey->next;
-			(pkey->next)->prev = pkey->prev;
-		}
-		delete pkey;
-		return true;
-	}
-	return false;
-}*/
-
-Node* insert(Node* const pbeg, Node** pend, Autobus key, Autobus ins)
-{
-	if (Node* pkey = find(pbeg, key)) {
-		Node* cur = new Node;
-		cur->aut = ins;
-		cur->next = pkey->next;
-		cur->prev = pkey;
-		pkey->next = cur;
-		if (pkey != *pend)(cur->next)->prev = cur;
-		else *pend = cur;
-		return cur;
-	}
-	return 0;
-}
-
-/*Routes* insertRoutes(Routes* const pbeg, Routes** pend, Autobus key, Autobus ins)
-{
-	if (Routes* pkey = findRoutes(pbeg, key)) {
-		Routes* cur = new Routes;
-		cur->aut = ins;
-		cur->next = pkey->next;
-		cur->prev = pkey;
-		pkey->next = cur;
-		if (pkey != *pend)(cur->next)->prev = cur;
-		else *pend = cur;
-		return cur;
-	}
-	return 0;
-}*/
 
 void busAdder(int d)
 {
@@ -195,11 +127,11 @@ void busAdder(int d)
 		cur.num = i;
 		f.write((char*)&cur, sizeof(Autobus));
 	}
-	
+
 	f.close();
 }
 
-Autobus* busReader(int &count) 
+Autobus* busReader(int& count)
 {
 	ifstream f("Buses.bin", ios::binary);
 	int cnt = 0;
