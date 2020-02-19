@@ -131,7 +131,7 @@ struct List
 	}
 };
 
-struct ListBus : List<Bus>
+/*struct ListBus : List<Bus>
 {
 	int amount = 0;
 	void show()
@@ -165,4 +165,4 @@ struct ListBus : List<Bus>
 		bus.init();
 		this->push_back(bus);
 	}
-};
+};*/

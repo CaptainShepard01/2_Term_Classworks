@@ -115,19 +115,22 @@ struct NodeList {
 
 void busAdder(int d)
 {
-	ofstream f("Buses.bin", ios::binary, ios::app);
+	ofstream f("Buses.bin", ios::binary);
 	Autobus cur;
 	for (int i = 0; i < d; ++i) {
 		cout << "Enter fio of the driver: ";
-		cin.clear;
+		cin.clear();
+		
 		cin.getline(cur.fio, 100);
 		cout << "Enter number of route: ";
 		cin.clear();
+		while (0)continue;
 		cin >> cur.route;
+		cin.clear();
+		while (cin.get() != '\n')continue;
 		cur.num = i;
 		f.write((char*)&cur, sizeof(Autobus));
 	}
-
 	f.close();
 }
 
@@ -144,14 +147,25 @@ Autobus* busReader(int& count)
 	for (int i = 0; i < cnt; ++i) {
 		f.read((char*)&mas[i], sizeof(Autobus));
 	}
-	delete[]mas;
 	f.close();
 	count = cnt;
+	ifstream f1("Buses.bin", ios::binary);
+	
+	for (int i = 0; i < cnt; ++i) {
+		f1.read((char*)&tmp, sizeof(Autobus));
+		cout << tmp.fio << endl;
+		cout << tmp.route << endl << endl;
+	}
+	f1.close();
 	return mas;
+	
 }
 
 int main()
 {
-
+	const int d = 10;
+	//busAdder(3);
+	int buscnt = 0;
+	busReader(buscnt);
 	return 0;
 }
