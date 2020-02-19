@@ -65,18 +65,18 @@ struct NodeList {
 		}
 	}
 
-	Node* find(Autobus key)
+	Node* find(int key)
 	{
 		Node* cur = head;
 		while (cur)
 		{
-			if (cur->info.num == key.num)break;
+			if (cur->info.num == key)break;
 			cur = cur->next;
 		}
 		return cur;
 	}
 
-	Node* insert(Autobus key, Autobus ins)
+	Node* insert(int key, Autobus ins)
 	{
 		if (Node* pkey = find(key)) {
 			Node* cur = new Node;
@@ -91,7 +91,7 @@ struct NodeList {
 		return 0;
 	}
 
-	bool remove(Autobus key)
+	bool remove(int key)
 	{
 		if (Node* pkey = find(key)) {
 			if (pkey == head) {
@@ -149,23 +149,45 @@ Autobus* busReader(int& count)
 	}
 	f.close();
 	count = cnt;
-	ifstream f1("Buses.bin", ios::binary);
+	/*ifstream f1("Buses.bin", ios::binary);
 	
 	for (int i = 0; i < cnt; ++i) {
 		f1.read((char*)&tmp, sizeof(Autobus));
+		cout << tmp.num << endl;
 		cout << tmp.fio << endl;
 		cout << tmp.route << endl << endl;
 	}
-	f1.close();
+	f1.close();*/
 	return mas;
 	
 }
 
 int main()
 {
-	const int d = 10;
-	//busAdder(3);
+	//const int d = 3;
+	//busAdder(d);
 	int buscnt = 0;
+	
+	cout << "Buses:\n]n";
 	busReader(buscnt);
+	cout << buscnt << endl;
+	Autobus* mas = new Autobus[buscnt];
+	mas = busReader(buscnt);
+	for (int i = 0; i < buscnt; ++i) {
+		cout << mas[i].num << endl;
+		cout << mas[i].fio << endl;
+		cout << mas[i].route << endl << endl;
+	}
+	NodeList Routes, Park;
+	cout << "Which autobus would u like to send on route?\n";
+	int key = 0;
+	cin >> key;
+	for (int i = 0; i < buscnt; ++i) {
+		if (key == mas[i].num) {
+			Routes.addLast(mas[i]);
+			break;
+		}
+	}
+
 	return 0;
 }
