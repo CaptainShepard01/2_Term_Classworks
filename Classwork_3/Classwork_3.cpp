@@ -42,7 +42,7 @@ struct NodeList {
 		node->info = i;
 		node->next = NULL;
 		if (head == NULL) {
-			tail = node;head = node;
+			tail = node; head = node;
 		}
 		else {
 			node->prev = tail;
@@ -120,21 +120,21 @@ void busAdder(int d)
 	for (int i = 0; i < d; ++i) {
 		cout << "Enter fio of the driver: ";
 		cin.clear();
-		
+
 		cin.getline(cur.fio, 100);
 		cout << "Enter number of route: ";
 		cin.clear();
-		while (0)continue;
+		//while (0)continue;
 		cin >> cur.route;
 		cin.clear();
 		while (cin.get() != '\n')continue;
-		cur.num = i;
+		cur.num = i + 1;
 		f.write((char*)&cur, sizeof(Autobus));
 	}
 	f.close();
 }
 
-Autobus* busReader(int& count)
+void busReader(int& count)
 {
 	ifstream f("Buses.bin", ios::binary);
 	int cnt = 0;
@@ -149,45 +149,66 @@ Autobus* busReader(int& count)
 	}
 	f.close();
 	count = cnt;
-	/*ifstream f1("Buses.bin", ios::binary);
-	
+	ifstream f1("Buses.bin", ios::binary);
+
 	for (int i = 0; i < cnt; ++i) {
 		f1.read((char*)&tmp, sizeof(Autobus));
-		cout << tmp.num << endl;
-		cout << tmp.fio << endl;
-		cout << tmp.route << endl << endl;
+		cout << "Number: " << tmp.num << endl;
+		cout << "Fio: " << tmp.fio << endl;
+		cout << "Route number: " << tmp.route << endl << endl;;
 	}
-	f1.close();*/
-	return mas;
-	
+	f1.close();
+	return;
+
 }
 
 int main()
 {
-	//const int d = 3;
+	const int d = 5;
 	//busAdder(d);
 	int buscnt = 0;
-	
-	cout << "Buses:\n]n";
-	busReader(buscnt);
-	cout << buscnt << endl;
-	Autobus* mas = new Autobus[buscnt];
-	mas = busReader(buscnt);
-	for (int i = 0; i < buscnt; ++i) {
-		cout << mas[i].num << endl;
-		cout << mas[i].fio << endl;
-		cout << mas[i].route << endl << endl;
+	cout << "Buses:\n\n";
+	//Autobus* buses = new Autobus[buscnt];
+	//busReader(buscnt);
+
+	ifstream f("Buses.bin", ios::binary);
+	int cnt = 0;
+	Autobus tmp;
+	while (f.read((char*)&tmp, sizeof(Autobus))) {
+		cnt++;
 	}
+	f.close();
+
+	//TODO seekg algorithm and logic to understand!!
+
+	ifstream f1("Buses.bin", ios::binary);
+	Autobus* mas = new Autobus[cnt];
+	for (int i = 0; i < cnt; ++i) {
+		f1.read((char*)&mas[i], sizeof(Autobus));
+	}
+	f1.close();
+
+	for (int i = 0; i < cnt; ++i) {
+		cout << "Number: " << mas[i].num << endl;
+		cout << "Fio: " << mas[i].fio << endl;
+		cout << "Route number: " << mas[i].route << endl << endl;
+	}
+	cout << "Total: " << cnt << " buses." << endl;
+
 	NodeList Routes, Park;
 	cout << "Which autobus would u like to send on route?\n";
 	int key = 0;
-	cin >> key;
-	for (int i = 0; i < buscnt; ++i) {
-		if (key == mas[i].num) {
-			Routes.addLast(mas[i]);
-			break;
+	bool flag = 0;
+	do {
+		cin >> key;
+		for (int i = 0; i < cnt; ++i) {
+			if (key == mas[i].num) {
+				Routes.addLast(mas[i]);
+				flag = true;
+				break;
+			}
 		}
-	}
-
+	} while (!flag);
+	delete[] mas;
 	return 0;
 }
