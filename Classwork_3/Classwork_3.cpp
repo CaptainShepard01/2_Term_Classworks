@@ -138,7 +138,7 @@ void busAdder(int d)
 		cin.getline(cur.fio, 100);
 		cout << "Enter number of route: ";
 		cin.clear();
-		//while (0)continue;
+		
 		cin >> cur.route;
 		cin.clear();
 		while (cin.get() != '\n')continue;
@@ -271,11 +271,11 @@ void AddRoute(int cnt, Autobus* mas, NodeList &Routes, NodeList &Park)
 			system("cls");
 			cout << "Buses:\n\n";
 			for (int i = 0; i < cnt; ++i) {
-				if (!seek(mas[i].num, Routes, Park)) {
+				//if (!seek(mas[i].num, Routes, Park)) {
 					cout << "Number: " << mas[i].num << endl;
 					cout << "Fio: " << mas[i].fio << endl;
 					cout << "Route number: " << mas[i].route << endl << endl;
-				}
+				//}
 			}
 			cout << "Total: " << cnt << " buses." << endl;
 			cout << "Which autobus would u like to send on route?\n";
