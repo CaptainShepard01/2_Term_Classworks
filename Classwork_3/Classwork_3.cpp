@@ -3,7 +3,9 @@
 #include <fstream>
 #include <direct.h>
 #include <cstdlib>
+#include <conio.h>
 //#include "Header.h"
+
 using namespace std;
 
 struct Autobus
@@ -34,8 +36,8 @@ struct Node {
 };
 
 struct NodeList {
-	Node* head;
-	Node* tail;
+	Node* head = NULL;
+	Node* tail = NULL;
 
 	void addLast(Autobus i) {
 		Node* node = new Node;
@@ -111,6 +113,18 @@ struct NodeList {
 		}
 		return false;
 	}
+	void Print()
+	{
+		Node* cur = new Node;
+		cur = head;
+		while (cur) {
+			cout << "Bus number: " << cur->info.num << endl;
+			cout << "Fio of its driver: " << cur->info.fio << endl;
+			cout << "Route number: " << cur->info.route << endl << endl;
+			cur = cur->next;
+		}
+		return;
+	}
 };
 
 void busAdder(int d)
@@ -162,12 +176,17 @@ void busReader(int& count)
 
 }
 
+void AddPark(int, Autobus*, NodeList &, NodeList &);
+void AddRoute(int, Autobus*, NodeList &, NodeList &);
+int menu();
+bool seek(int, NodeList, NodeList);
+
 int main()
 {
 	const int d = 5;
 	//busAdder(d);
 	int buscnt = 0;
-	cout << "Buses:\n\n";
+	
 	//Autobus* buses = new Autobus[buscnt];
 	//busReader(buscnt);
 
@@ -188,27 +207,209 @@ int main()
 	}
 	f1.close();
 
-	for (int i = 0; i < cnt; ++i) {
-		cout << "Number: " << mas[i].num << endl;
-		cout << "Fio: " << mas[i].fio << endl;
-		cout << "Route number: " << mas[i].route << endl << endl;
-	}
-	cout << "Total: " << cnt << " buses." << endl;
+	
 
 	NodeList Routes, Park;
-	cout << "Which autobus would u like to send on route?\n";
+	//cout << "What is your next move?\n";	
+	/*int key = 0;
+	bool flag = 0;
+	bool temp = 0;
+	do {
+		system("cls");
+		cout << "Buses:\n\n";
+		for (int i = 0; i < cnt; ++i) {
+			cout << "Number: " << mas[i].num << endl;
+			cout << "Fio: " << mas[i].fio << endl;
+			cout << "Route number: " << mas[i].route << endl << endl;
+		}
+		cout << "Total: " << cnt << " buses." << endl;
+		cout << "Which autobus would u like to send on route?\n";
+		do {
+			cin >> key;
+			for (int i = 0; i < cnt; ++i) {
+				if (key == mas[i].num) {
+					Routes.addLast(mas[i]);
+					flag = true;
+					break;
+				}
+			}
+		} while (!flag);
+		cout << "If it is the end, press 1, else press 0!\n";
+		cin >> temp;
+	} while (!temp);
+	system("cls");
+	Routes.Print();*/
+	bool isRunning = 1;
+	while (isRunning) {
+		int key = menu();
+		switch (key) {
+		case 0: AddRoute(cnt, mas, Routes, Park); break;
+		case 1: AddPark(cnt, mas, Park, Routes); break;
+		case 2: isRunning = 0; 
+		}
+	}
+
+	delete[] mas;
+	return 0;
+}
+
+
+void AddRoute(int cnt, Autobus* mas, NodeList &Routes, NodeList &Park)
+{
+	cout << "Add: 1\nShow: 0\n\n";
+	int t = 0;
+	do {
+		cin >> t;
+	} while (t != 1 && t != 0);
+	system("cls");
 	int key = 0;
 	bool flag = 0;
-	do {
-		cin >> key;
-		for (int i = 0; i < cnt; ++i) {
-			if (key == mas[i].num) {
-				Routes.addLast(mas[i]);
-				flag = true;
-				break;
+	bool temp = 0;
+	if (t == 1) {
+		do {
+			//while (cin.get() != '\n')continue;
+			system("cls");
+			cout << "Buses:\n\n";
+			for (int i = 0; i < cnt; ++i) {
+				if (!seek(mas[i].num, Routes, Park)) {
+					cout << "Number: " << mas[i].num << endl;
+					cout << "Fio: " << mas[i].fio << endl;
+					cout << "Route number: " << mas[i].route << endl << endl;
+				}
 			}
+			cout << "Total: " << cnt << " buses." << endl;
+			cout << "Which autobus would u like to send on route?\n";
+			do {
+				cin >> key;
+				for (int i = 0; i < cnt; ++i) {
+					if (key == mas[i].num) {
+						if (!seek(key, Routes, Park)) {
+							Routes.addLast(mas[i]);
+						}
+						else cout << "There is such bus already on the Route or in the Park\n";
+						flag = true;
+						break;
+					}
+				}
+				if (!flag) {
+					std::cout << "There is no bus with such number, try existing number!\n";
+					system("pause");
+				}
+				cin.clear();
+			} while (!flag);
+			cout << "If it is the end, press 1, else press 0!\n";
+			do {
+				cin >> temp;
+			} while (temp != 0 && temp != 1);
+		} while (!temp);
+		system("cls");
+		cout << "Buses on the Route:\n\n";
+		Routes.Print();
+		system("pause");
+	}
+	else {
+		cout << "Buses on the Route:\n\n";
+		Routes.Print();
+		system("pause");
+	}
+}
+
+void AddPark(int cnt, Autobus* mas, NodeList &Park, NodeList &Routes)
+{
+	cout << "Add: 1\nShow: 0\n\n";
+	int t = 0;
+	do {
+		cin >> t;
+	} while (t != 1 && t != 0);
+	system("cls");
+	int key = 0;
+	bool flag = 0;
+	bool temp = 0;
+	if (t == 1){
+		do {
+			//while (cin.get() != '\n')continue;
+			system("cls");
+			cout << "Buses:\n\n";
+			for (int i = 0; i < cnt; ++i) {
+				if (!seek(mas[i].num, Routes, Park)) {
+					cout << "Number: " << mas[i].num << endl;
+					cout << "Fio: " << mas[i].fio << endl;
+					cout << "Route number: " << mas[i].route << endl << endl;
+				}
+			}
+			cout << "Total: " << cnt << " buses." << endl;
+			cout << "Which autobus would u like to send on route?\n";
+			do {
+				cin >> key;
+				for (int i = 0; i < cnt; ++i) {
+					if (key == mas[i].num) {
+						if (!seek(key, Routes, Park)) {
+							Park.addLast(mas[i]);
+						}
+						else cout << "There is such bus already on the Route or in the Park\n";
+						flag = true;
+						break;
+					}
+				}
+				if (!flag) {
+					cout << "There is no bus with such number, try existing number!\n";
+					system("pause");
+				}
+				cin.clear();
+			} while (!flag);
+			cout << "If it is the end, press 1, else press 0!\n";
+			do {
+				cin >> temp;
+			} while (temp != 0 && temp != 1);
+		} while (!temp);
+		system("cls");
+		cout << "Buses in the Park:\n\n";
+		Park.Print();
+		system("pause");
+	}
+	else {
+		cout << "Buses in the Park:\n\n";
+		Park.Print();
+		system("pause");
+	}
+}
+
+int menu() {
+	int key = 0;
+	int code;
+	do {
+		system("cls");
+		key = (key + 3) % 3;
+		if (key == 0) cout << "-> AddRoute" << endl;
+		else  cout << "   AddRoute" << endl;
+		if (key == 1) cout << "-> AddPark" << endl;
+		else  cout << "   AddPark" << endl;
+		if (key == 2) cout << "-> Exit" << endl;
+		else  cout << "   Exit" << endl;
+		code = _getch();
+		if (code == 224)
+		{
+			code = _getch();
+			if (code == 80) key++;
+			if (code == 72) key--;
 		}
-	} while (!flag);
-	delete[] mas;
+	} while (code != 13);
+	system("cls");
+	return key;
+}
+
+bool seek(int key, NodeList Routes, NodeList Park)
+{
+	Node* cur = Routes.head;
+	while (cur) {
+		if (cur->info.num == key)return 1;
+		cur = cur->next;
+	}
+	cur = Park.head;
+	while (cur) {
+		if (cur->info.num == key)return 1;
+		cur = cur->next;
+	}
+
 	return 0;
 }
