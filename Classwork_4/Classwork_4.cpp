@@ -11,7 +11,6 @@ enum type { pass = 0, cargo = 1};
 struct vagon {
 	int number = 0;
 	enum type aType;
-	vagon* next;
 };
 
 
