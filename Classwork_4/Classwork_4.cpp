@@ -101,17 +101,16 @@ int main()
 {
 	Stack Train, Pass, Cargo;
 
-	int k = 0, key = 0;
+	int key = 0;
 	
 	bool isRunning = 1;
 	while (isRunning) {
 		key = menu();
 		switch (key) {
 		case 0: {
-			cout << "How many vagons would you like?\n";
-			cin >> k;
+			cout << "There are 10 vagons\n";
 			vagon* mas = new vagon[10];
-			VagonMaker(Train, mas, k);
+			VagonMaker(Train, mas, 10);
 			for (int i = 0; i < 10; ++i)cout << mas[i].aType << endl;
 			StackPrint(Train);
 			break;
