@@ -5,6 +5,7 @@
 #include <fstream>
 #include <direct.h>
 #include <cstdlib>
+#include <Windows.h>
 #include "Header.h"
 using namespace std;
 
@@ -14,29 +15,18 @@ struct dict {
 };
 
 void Dictionary_creator() {
-	/*_setmode(_fileno(stdout), _O_U16TEXT);
-	_setmode(_fileno(stdin), _O_U16TEXT);
-	_setmode(_fileno(stderr), _O_U16TEXT);*/
-
-	//setlocale(LC_ALL, "Russian");
-
 	ifstream f("words.bin", ios::binary);
 	dict d;
 	//_mkdir("Dictionary");
 	_chdir("Dictionary");
 	
 	
-	
-	
-
 	while (f.read((char*)&d, sizeof(dict))) {
-		//ofstream f1(strcat(d.angl, ".txt"));
-		FILE* f1 = fopen(strcat(d.angl, ".txt"), "wb");
-		cout << d.ukr;
-		fwrite(d.ukr, sizeof(d.ukr), 1, f1);
-		//f1 << d.ukr;
+		FILE* f1 = fopen(strcat(d.angl, ".txt"), "w");
+		cout << d.ukr << endl;
+		setlocale(LC_ALL, "rus");
+		fwrite(d.ukr, strlen(d.ukr), 1, f1);
 		fclose(f1);
-		//f1.close(); 
 		cout << "Created\n";
 	}
 	system("pause");
@@ -45,24 +35,23 @@ void Dictionary_creator() {
 
 void Words_creator(int n)
 {
-	/*_setmode(_fileno(stdout), _O_U16TEXT);
-	_setmode(_fileno(stdin), _O_U16TEXT);
-	_setmode(_fileno(stderr), _O_U16TEXT);*/
-
-	//setlocale(LC_ALL, "Russian");
-	//FILE* file = fopen("words.bin", "wb");
 	ofstream f2("words.bin", ios::binary);
 	dict d;
 	for (int i = 0; i < n; ++i) {
 		cout << "Enter in English: ";
 		cin.getline(d.angl, 100);
 		cout << "Enter in Russian (translation or description): ";
-		//setlocale(LC_ALL, "rus");
 		cin.getline(d.ukr, 100);
+		//cout << strlen(d.ukr);
+
+		/*_chdir("Dictionary");
+		FILE* f1 = fopen(strcat(d.angl, ".txt"), "w");
+		fwrite(d.ukr, strlen(d.ukr), 1, f1);
+		fclose(f1);
+		_chdir("D:\Visual studio\2_Term_Classworks\Classwork_1");*/
+
 		f2.write((char*)&d, sizeof(dict));
-		//fwrite(&d, sizeof(dict), 1, file);
 	}
-	//fclose(file);
 	f2.close();
 	ifstream f1("words.bin", ios::binary);
 	while (f1.read((char*)&d, sizeof(dict))) {
@@ -74,12 +63,9 @@ void Words_creator(int n)
 
 int main()
 {
-	/*_setmode(_fileno(stdout), _O_U16TEXT);
-	_setmode(_fileno(stdin), _O_U16TEXT);
-	_setmode(_fileno(stderr), _O_U16TEXT);*/
-
 	int count = 0;
-	//setlocale(LC_ALL, "Russian");
+	SetConsoleCP(1251);
+	SetConsoleOutputCP(1251);
 	system("cls");
 	bool isRunning = true;
 	while (isRunning)
