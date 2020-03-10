@@ -25,12 +25,19 @@ void Dictionary_creator() {
 	//_mkdir("Dictionary");
 	_chdir("Dictionary");
 	
+	
+	
+	
 
 	while (f.read((char*)&d, sizeof(dict))) {
-		ofstream f1(strcat(d.angl, ".txt"));
+		//ofstream f1(strcat(d.angl, ".txt"));
+		FILE* f1 = fopen(strcat(d.angl, ".txt"), "wb");
 		cout << d.ukr;
-		f1 << d.ukr;
-		f1.close(); cout << "Created\n";
+		fwrite(d.ukr, sizeof(d.ukr), 1, f1);
+		//f1 << d.ukr;
+		fclose(f1);
+		//f1.close(); 
+		cout << "Created\n";
 	}
 	system("pause");
 	f.close();
