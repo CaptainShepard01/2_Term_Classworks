@@ -4,31 +4,34 @@
 
 using namespace std;
 
-template <typename t>
+//template <typename t>
 struct Node
 {
-	t data;
-	Node<t>* right, * left;
-	Node(t data = t(), right = nullptr, left = nullptr)
+	int data;
+	Node* right = nullptr; Node *left = nullptr;
+	/*Node(t data = t(), right = nullptr, left = nullptr)
 	{
 		this->data = data;
 		this->right = right;
 		this->left = left;
-	}
+	}*/
 };
 
-template <typename t>
+//template <typename t>
 struct Tree
 {
-	Node<t>* root;
+	Node* root = nullptr;
 
-	Node<t>* first(t* data) {
-		this->root = new Node<t>*(data);
+	Node* first(int data) {
+		root = new Node;
+		root->data = data;
+		root->left = nullptr;
+		root->right = nullptr;
 		return root;
 	}
 	
 
-	void search_insert(t* data, Node<t>* cur_root = this->root)
+	void search_insert(Node* root, int data)
 	{
 			/*if (data < current->data)add(data, current->left);
 			if (data > current->data)add(data, current->right);
@@ -42,7 +45,7 @@ struct Tree
 				return;
 			}*/
 
-			Node<t>* current = root; Node<t>* prev;
+		Node* current = root; Node* prev = new Node;
 			bool found = false;
 			while (current && !found) {
 				prev = current;
@@ -50,7 +53,7 @@ struct Tree
 				else if (data < current->data)current = current->left;
 				else current = current->right;
 			}
-			Node<t>* pnew = new Node<t>;
+			Node* pnew = new Node;
 			pnew->data = data;
 			pnew->left = nullptr;
 			pnew->right = nullptr;
@@ -59,7 +62,7 @@ struct Tree
 			return;
 	}
 
-	void print_tree(Node<t>* p,int level) 
+	void print_tree(Node* p,int level) 
 	{
 		if (p) {
 			print_tree(p->left, level + 1);
@@ -73,10 +76,13 @@ struct Tree
 
 int main()
 {
-	Tree<int>* tree = new Tree<int>;
+	int level = 0;
+	Tree* tree = new Tree;
 	int b[] = { 10, 25, 20, 6, 21, 8, 1, 30 };
-	Node<int>* root = tree->first(&b[0]);
-	for (int i = 1; i < 8; i++)tree->search_insert(&b[i], root);
-	tree->print_tree(root, 0);
+	Node* root = tree->first(b[0]);
+	for (int i = 1; i < 8; i++)tree->search_insert(root, b[i]);
+	tree->print_tree(root, level);
+	system("pause");
+	delete tree;
 	return 0;
 }
