@@ -152,6 +152,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Classwork_2.cpp" />
+    <ClCompile Include="Functions.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Header.h" />

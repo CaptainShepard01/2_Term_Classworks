@@ -67,11 +67,11 @@ struct NodeList {
 		if (Node * pkey = find_word(key)) {
 			if (pkey == head) {
 				head = (head)->next;
-				(head)->prev = 0;
+				(head)->prev = NULL;
 			}
 			else if (pkey == tail) {
 				tail = (tail)->prev;
-				(tail)->next = 0;
+				(tail)->next = NULL;
 			}
 			else {
 				(pkey->prev)->next = pkey->next;
@@ -88,11 +88,11 @@ struct NodeList {
 		if (Node * pkey = find_translation(key)) {
 			if (pkey == head) {
 				head = (head)->next;
-				(head)->prev = 0;
+				(head)->prev = NULL;
 			}
 			else if (pkey == tail) {
 				tail = (tail)->prev;
-				(tail)->next = 0;
+				(tail)->next = NULL;
 			}
 			else {
 				(pkey->prev)->next = pkey->next;
@@ -125,7 +125,7 @@ struct NodeList {
 	{
 		Node* cur = head;
 		while (cur) {
-			cout << "Word: " << cur->info.angl << " ---> " << "Translation: " << cur->info.rus << endl;
+			cout/* << "Word: " << cur->info.angl << " ---> " */<< "Translation: " << cur->info.rus << endl;
 			cur = cur->next;
 		}
 	}
